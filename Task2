@@ -1,3 +1,4 @@
+#Simple Calculator
 def calculate(num_a, num_b, operator):
     if operator == '+':
         return num_a + num_b
