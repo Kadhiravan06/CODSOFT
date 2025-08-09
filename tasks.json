@@ -1,0 +1,32 @@
+[
+    {
+        "title": "Buy groceries",
+        "desc": "Milk, eggs, bread, and vegetables",
+        "deadline": "2025-08-10",
+        "done": false
+    },
+    {
+        "title": "Call mom",
+        "desc": "Check in and say hello",
+        "deadline": "2025-08-09",
+        "done": false
+    },
+    {
+        "title": "Finish homework",
+        "desc": "Complete math assignment",
+        "deadline": "2025-08-11",
+        "done": false
+    },
+    {
+        "title": "Go for a walk",
+        "desc": "Evening walk in the park",
+        "deadline": "2025-08-09",
+        "done": false
+    },
+    {
+        "title": "Read 10 pages",
+        "desc": "Read 10 pages of any book",
+        "deadline": "2025-08-09",
+        "done": false
+    }
+]

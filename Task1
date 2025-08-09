@@ -1,0 +1,66 @@
+import json
+import os
+
+TASKS_FILE = "tasks.json"
+
+def loadtasks():
+    if not os.path.exists(TASKS_FILE):
+        return []
+    with open(TASKS_FILE, 'r') as f:
+        return json.load(f)
+
+def savetasks(tasks):
+    with open(TASKS_FILE, 'w') as f:
+        json.dump(tasks, f, indent=4)
+
+def addtask(tasks):
+    title = input("Task title: ")
+    desc = input("Task description: ")
+    deadline = input("Deadline (YYYY-MM-DD): ")
+    tasks.append({"title": title, "desc": desc, "deadline": deadline, "done": False})
+    savetasks(tasks)
+
+def listtasks(tasks):
+    if not tasks:
+        print("No tasks found.")
+        return
+    for idx, task in enumerate(tasks):
+        status = "✔️" if task["done"] else "❌"
+        print(f'{idx+1}. {task["title"]} [{status}] - {task["desc"]} (Due: {task["deadline"]})')
+
+def updatetask(tasks):
+    listtasks(tasks)
+    task_num = int(input("Enter task number to mark complete: ")) - 1
+    if 0 <= task_num < len(tasks):
+        tasks[task_num]["done"] = True
+        savetasks(tasks)
+        print("Task marked as complete.")
+
+def deletetask(tasks):
+    listtasks(tasks)
+    task_num = int(input("Enter task number to delete: ")) - 1
+    if 0 <= task_num < len(tasks):
+        removed = tasks.pop(task_num)
+        savetasks(tasks)
+        print(f'Task "{removed["title"]}" deleted.')
+
+def menu():
+    tasks = loadtasks()
+    while True:
+        print("\nTo-Do List Menu:\n1. Add Task\n2. List Tasks\n3. Complete Task\n4. Delete Task\n5. Exit")
+        choice = input("Choose an option: ")
+        if choice == "1":
+            addtask(tasks)
+        elif choice == "2":
+            listtasks(tasks)
+        elif choice == "3":
+            updatetask(tasks)
+        elif choice == "4":
+            deletetask(tasks)
+        elif choice == "5":
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+if __name__ == "__main__":
+    menu()
