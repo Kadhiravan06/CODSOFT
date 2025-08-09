@@ -1,66 +1,80 @@
 import json
-import os
+from pathlib import Path
 
-TASKS_FILE = "tasks.json"
+DATA_FILE = Path("my_tasks.json")
 
-def loadtasks():
-    if not os.path.exists(TASKS_FILE):
-        return []
-    with open(TASKS_FILE, 'r') as f:
-        return json.load(f)
+def load_task_data():
+    if DATA_FILE.exists():
+        with open(DATA_FILE, "r") as file:
+            return json.load(file)
+    return []
 
-def savetasks(tasks):
-    with open(TASKS_FILE, 'w') as f:
-        json.dump(tasks, f, indent=4)
+def save_task_data(tasks):
+    with open(DATA_FILE, "w") as file:
+        json.dump(tasks, file, indent=2)
 
-def addtask(tasks):
+def create_task(tasks):
     title = input("Task title: ")
-    desc = input("Task description: ")
-    deadline = input("Deadline (YYYY-MM-DD): ")
-    tasks.append({"title": title, "desc": desc, "deadline": deadline, "done": False})
-    savetasks(tasks)
+    details = input("Details/Description: ")
+    due_date = input("Due date (YYYY-MM-DD): ")
+    tasks.append({"title": title, "details": details, "deadline": due_date, "done": False})
+    save_task_data(tasks)
+    print(f"✅ Added: {title}")
 
-def listtasks(tasks):
+def display_tasks(tasks):
     if not tasks:
-        print("No tasks found.")
+        print("No tasks to show.")
         return
-    for idx, task in enumerate(tasks):
-        status = "✔️" if task["done"] else "❌"
-        print(f'{idx+1}. {task["title"]} [{status}] - {task["desc"]} (Due: {task["deadline"]})')
+    for idx, task in enumerate(tasks, start=1):
+        status = "✅ Completed" if task["done"] else "⏳ Pending"
+        print(f"{idx}. {task['title']} - {status}")
+        print(f"   Description: {task['details']}")
+        print(f"   Deadline: {task['deadline']}")
 
-def updatetask(tasks):
-    listtasks(tasks)
-    task_num = int(input("Enter task number to mark complete: ")) - 1
-    if 0 <= task_num < len(tasks):
-        tasks[task_num]["done"] = True
-        savetasks(tasks)
-        print("Task marked as complete.")
+def mark_task_done(tasks):
+    display_tasks(tasks)
+    try:
+        choice = int(input("Which task number is complete? ")) - 1
+        tasks[choice]["done"] = True
+        save_task_data(tasks)
+        print(f"🎯 Task '{tasks[choice]['title']}' marked as done.")
+    except (IndexError, ValueError):
+        print("⚠ Invalid selection.")
 
-def deletetask(tasks):
-    listtasks(tasks)
-    task_num = int(input("Enter task number to delete: ")) - 1
-    if 0 <= task_num < len(tasks):
-        removed = tasks.pop(task_num)
-        savetasks(tasks)
-        print(f'Task "{removed["title"]}" deleted.')
+def remove_task(tasks):
+    display_tasks(tasks)
+    try:
+        choice = int(input("Which task do you want to delete? ")) - 1
+        removed = tasks.pop(choice)
+        save_task_data(tasks)
+        print(f"🗑 Deleted: {removed['title']}")
+    except (IndexError, ValueError):
+        print("⚠ Invalid selection.")
 
-def menu():
-    tasks = loadtasks()
+def main_menu():
+    task_list = load_task_data()
     while True:
-        print("\nTo-Do List Menu:\n1. Add Task\n2. List Tasks\n3. Complete Task\n4. Delete Task\n5. Exit")
+        print("\n--- TO-DO LIST MENU ---")
+        print("1️⃣ Add Task")
+        print("2️⃣ View Tasks")
+        print("3️⃣ Mark Task Complete")
+        print("4️⃣ Delete Task")
+        print("5️⃣ Exit")
         choice = input("Choose an option: ")
+
         if choice == "1":
-            addtask(tasks)
+            create_task(task_list)
         elif choice == "2":
-            listtasks(tasks)
+            display_tasks(task_list)
         elif choice == "3":
-            updatetask(tasks)
+            mark_task_done(task_list)
         elif choice == "4":
-            deletetask(tasks)
+            remove_task(task_list)
         elif choice == "5":
+            print("👋 Goodbye!")
             break
         else:
-            print("Invalid choice. Try again.")
+            print("⚠ Please select a valid option.")
 
 if __name__ == "__main__":
-    menu()
+    main_menu()

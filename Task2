@@ -1,0 +1,23 @@
+def calculate(num_a, num_b, operator):
+    if operator == '+':
+        return num_a + num_b
+    elif operator == '-':
+        return num_a - num_b
+    elif operator == '*':
+        return num_a * num_b
+    elif operator == '/':
+        if num_b == 0:
+            return "Cannot divide by zero."
+        else:
+            return num_a / num_b
+    else:
+        return "Operation not supported."
+
+print("Simple Calculator")
+first = float(input("Type your first value: "))
+second = float(input("Type your second value: "))
+choice = input("Pick an operation (choose +, -, *, / ): ")
+
+outcome = calculate(first, second, choice)
+
+print(f"Result of {first} {choice} {second} is: {outcome}")
