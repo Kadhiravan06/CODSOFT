@@ -1,0 +1,18 @@
+[
+    {
+        "title": "Finish math homework",
+        "done": false
+    },
+    {
+        "title": "Study for cycle test",
+        "done": true
+    },
+    {
+        "title": "Complete math assignment",
+        "done": false
+    },
+    {
+        "title": "Prepare presentation slides",
+        "done": false
+    }
+]
